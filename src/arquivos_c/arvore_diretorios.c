@@ -129,8 +129,8 @@ void cmd_ls(void) {
     for (f = atual->filho; f; f = f->irmao) {
         perm_texto(f->fcb.permissoes, f->fcb.tipo == TIPO_DIRETORIO, perm);
         strftime(data, sizeof(data), "%d/%m/%Y %H:%M", localtime(&f->fcb.modificado));
-        printf("%3d %s %-7s %4d %5d %s %s%s\n", f->fcb.id, perm, nome_usuario(f->fcb.dono),
-               f->fcb.grupo, f->fcb.tamanho, data, f->fcb.nome,
+        printf("%3d %s %-7s %-10s %5d %s %s%s\n", f->fcb.id, perm, nome_usuario(f->fcb.dono),
+               nome_grupo(f->fcb.grupo), f->fcb.tamanho, data, f->fcb.nome,
                f->fcb.tipo == TIPO_DIRETORIO ? "/" : "");
     }
 }

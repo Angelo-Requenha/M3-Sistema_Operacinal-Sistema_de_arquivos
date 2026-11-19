@@ -181,8 +181,8 @@ void cmd_stat(const char *nome) {
     perm_texto(no->fcb.permissoes, no->fcb.tipo == TIPO_DIRETORIO, perm);
     printf("  Nome: %s\n", no->fcb.nome);
     printf(" Inode: %d   Tipo: %s   Tamanho: %d bytes\n", no->fcb.id, tipo_texto(no->fcb.tipo), no->fcb.tamanho);
-    printf("Acesso: (%04o/%s)  Dono: %s (uid %d)  Grupo: %d\n", no->fcb.permissoes, perm,
-           nome_usuario(no->fcb.dono), no->fcb.dono, no->fcb.grupo);
+    printf("Acesso: (%04o/%s)  Dono: %s (uid %d)  Grupo: %s (gid %d)\n", no->fcb.permissoes, perm,
+           nome_usuario(no->fcb.dono), no->fcb.dono, nome_grupo(no->fcb.grupo), no->fcb.grupo);
     printf(" Criado: %s", ctime(&no->fcb.criado));
     printf("Modific: %s", ctime(&no->fcb.modificado));
     printf(" Acesso: %s", ctime(&no->fcb.acessado));

@@ -1,4 +1,7 @@
-/* main.c - ponto de entrada: loop do terminal que le o comando e chama a funcao certa (5.2) */
+/* UNIVALI - Sistemas Operacionais - Avaliacao M3
+ * Alunos: Angelo Miguel Requenha, Bruno de Queiroz, Lucas Henrique de Melo Gubert
+ *
+ * main.c - ponto de entrada: loop do terminal que le o comando e chama a funcao certa (5.2) */
 #include <stdio.h>
 #include <string.h>
 #include "src/arquivos_h/arvore_diretorios.h"
@@ -13,8 +16,11 @@ static void ajuda(void) {
            "  cp <orig> <dest>       mv <orig> <dest>     rm <arq|dir vazio>\n"
            "  chmod <octal> <nome>   stat <nome>          exec <arq.sh>\n"
            "  su <usuario>           whoami               df (mapa do disco)\n"
+           "  groups (lista grupos e usuarios)\n"
+           "  useradd <nome> <grupo> [senha]   groupadd <nome>   (apenas root)\n"
            "  help                   exit\n"
-           "Usuarios: root, alice, bob (grupo 100), carlos (grupo 200)\n");
+           "Usuarios iniciais: root (senha: admin), alice e bob (grupo alunos),\n"
+           "carlos (grupo visitantes)\n");
 }
 
 /* Remove espacos do inicio/fim (modifica a string) */
@@ -50,7 +56,7 @@ int main(void) {
     printf("Mini-Sistema de Arquivos em Memoria - digite 'help'\n");
 
     for (;;) {
-        char *cmd, *a1, *a2;
+        char *cmd, *a1, *a2, *a3;
 
         caminho(atual, cwd, sizeof(cwd));
         printf("%s@fs:%s$ ", usuario_atual.nome, cwd);
@@ -63,6 +69,7 @@ int main(void) {
         cmd = strtok(linha, " \t");
         a1  = strtok(NULL, " \t");
         a2  = strtok(NULL, " \t");
+        a3  = strtok(NULL, " \t");
         if (!cmd) continue;
 
         if      (strcmp(cmd, "exit")   == 0) break;
@@ -81,6 +88,9 @@ int main(void) {
         else if (strcmp(cmd, "exec")   == 0) cmd_exec(a1);
         else if (strcmp(cmd, "su")     == 0) cmd_su(a1);
         else if (strcmp(cmd, "whoami") == 0) cmd_whoami();
+        else if (strcmp(cmd, "groups") == 0) cmd_groups();
+        else if (strcmp(cmd, "useradd")  == 0) cmd_useradd(a1, a2, a3);
+        else if (strcmp(cmd, "groupadd") == 0) cmd_groupadd(a1);
         else if (strcmp(cmd, "df")     == 0) disco_mostrar();
         else printf("Comando desconhecido: '%s' (digite 'help')\n", cmd);
     }

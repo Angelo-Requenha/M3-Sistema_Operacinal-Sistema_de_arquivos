@@ -8,11 +8,21 @@
 #define PERM_W 2
 #define PERM_X 1
 
+#define MAX_USUARIOS 16
+#define MAX_GRUPOS   16
+#define MAX_TEXTO    32  /* tamanho maximo de nome e senha */
+
 typedef struct {
-    const char *nome;
-    int uid;
-    int gid;
+    char nome[MAX_TEXTO];
+    char senha[MAX_TEXTO]; /* "" = usuario sem senha */
+    int  uid;
+    int  gid;              /* grupo do usuario */
 } Usuario;
+
+typedef struct {
+    char nome[MAX_TEXTO];
+    int  gid;
+} Grupo;
 
 extern Usuario usuario_atual; /* "usuario atual" global */
 
@@ -21,9 +31,13 @@ extern Usuario usuario_atual; /* "usuario atual" global */
 int  verificar_permissao(int perm, int dono, int grupo, int op, const char *nome);
 void perm_texto(int perm, int eh_dir, char *saida); /* 0755 -> "drwxr-xr-x" */
 const char *nome_usuario(int uid);
+const char *nome_grupo(int gid);
 
 void cmd_chmod(const char *modo, const char *nome);
-void cmd_su(const char *nome);
+void cmd_su(const char *nome);        /* pede senha se o usuario tiver uma */
 void cmd_whoami(void);
+void cmd_useradd(const char *nome, const char *grupo, const char *senha); /* so root */
+void cmd_groupadd(const char *nome);                                      /* so root */
+void cmd_groups(void);                /* lista grupos e seus membros */
 
 #endif
